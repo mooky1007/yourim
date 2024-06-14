@@ -27,7 +27,7 @@ header {
     justify-content: center;
     flex-direction: column;
     height: 50vmin;
-    max-height: 300px;
+    max-height: 240px;
 }
 
 .title_section h1 {
