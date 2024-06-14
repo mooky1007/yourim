@@ -24,6 +24,7 @@
             <span class="label" data-aos="fade-up">K&C CCL</span>
             <h1 data-aos="fade-up" data-aos-delay="100">KIM&CHA COUPLE CREDIT LOAN</h1>
             <span data-aos="fade-up" data-aos-delay="300">+<strong id="diff_date">0</strong> 일 지났습니다.</span>
+            <span data-aos="fade-up" data-aos-delay="350">현재 총 이자수익은 <strong id="diff_money">0</strong>원 입니다.</span>
         </div>
         <div class="account_total" data-aos="fade-up" data-aos-delay="150">
             <strong id="acc">5,000,000</strong>
@@ -76,7 +77,7 @@
 
                 this.render();
 
-                refresh.addEventListener('click', ()=> window.location.reload())
+                refresh.addEventListener('click', () => window.location.reload())
             }
 
             get diffDate() {
@@ -122,6 +123,31 @@
                     div.append(mSpan, mSpan2);
                     interList.append(div);
                 }
+
+                const year3 = 2026;
+                for (let i = 0; i < 12; i++) {
+                    let days = new Date(year3, i, 0).getDate();
+                    const div = document.createElement('div')
+                    const mSpan = document.createElement('span')
+                    const mSpan2 = document.createElement('span')
+
+                    div.classList.add('row')
+                    mSpan.innerHTML = `${year3}. ${i + 1 > 9 ? i + 1 : `0${i + 1}`}`;
+                    mSpan2.innerHTML = `<span>${(days * this.oneDay).toLocaleString()}</span><span>원</span>`;
+
+                    div.append(mSpan, mSpan2);
+                    interList.append(div);
+                }
+
+                const div = document.createElement('div')
+                const mSpan = document.createElement('span')
+                const mSpan2 = document.createElement('span')
+
+                div.classList.add('row')
+                div.style.justifyContent = 'center';
+                div.style.fontSize = '20px';
+                div.innerHTML = `⋮`
+                interList.append(div);
             }
 
             render() {
@@ -129,6 +155,7 @@
                 start_date.innerHTML = this.date;
                 late.innerHTML = `${this.interestLate * 100}% <span>(기본 5% + 여자친구 우대 5%)</span>`
                 start_money.innerHTML = `${this.firstPrice.toLocaleString()}원`
+                diff_money.innerHTML = (this.oneDay * this.diffDate).toLocaleString()
 
                 const numAnim = new countUp.CountUp(acc, (this.firstPrice + (this.oneDay * this.diffDate)), { duration: 1, });
                 const numAnim2 = new countUp.CountUp(diff_date, (this.diffDate), { duration: 1, });
