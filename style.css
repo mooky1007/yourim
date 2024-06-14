@@ -1,0 +1,138 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Pretendard', sans-serif;
+}
+
+html {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+body {
+    width: 100%;
+    max-width: 500px;
+    padding-bottom: 50px;
+}
+
+header {
+    background: linear-gradient(300deg, rgb(3, 68, 165) 0%, rgb(53, 109, 220) 100%);
+    color: #fff;
+    padding: 10% 5% 10%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    height: 50vmin;
+    max-height: 300px;
+}
+
+.title_section h1 {
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.title_section > span {
+    font-size: 14px;
+    font-weight: 100;
+    opacity: 0.9;
+}
+
+.title_section > span.label {
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 3px 5px;
+    font-size: 10px;
+    margin-bottom: 10px;
+}
+
+.account_total {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.account_total strong {
+    font-size: 28px;
+    font-weight: 400;
+    margin-right: 3px;
+}
+
+.account_total span {
+    font-size: 16px;
+    font-weight: 200;
+    position: relative;
+    top: -3px;
+}
+
+.hover-title {
+    color: #444;
+    font-size: 18px;
+    box-shadow: 0 2px 8px rgb(180, 193, 213, 0.8);
+    width: 90%;
+    padding: 15px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    position: relative;
+    background: #fff;
+    z-index: 2;
+    transform: translateY(-50%);
+    border-radius: 5px;
+}
+
+.infor {
+    width: 90%;
+    margin: 0 auto;
+    border-top: 1px solid #777;
+    border-bottom: 1px solid #777;
+    padding: 10px 0;
+}
+
+.interest_list {
+    width: 90%;
+    margin: 0 auto;
+    border-bottom: 1px solid #777;
+    padding: 10px 0;
+    font-size: 15px;
+    overflow: auto;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    letter-spacing: -0.2px;
+    color: #333;
+}
+
+.infor .row > span > span {
+    color: #888;
+    font-size: 13px;
+}
+
+.row p {
+    position: relative;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+} 
+
+.row p::after {
+    content: '';
+    background: rgb(127, 178, 255);
+    width: 100%;
+    height: 8px;
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    z-index: -1;
+    opacity: 0.4;
+}
