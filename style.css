@@ -12,7 +12,6 @@ html {
     display: flex;
     justify-content: center;
     background: linear-gradient(300deg, #333 0%, #000);
-    height: 100%;
 }
 
 body {
