@@ -76,7 +76,7 @@
 
                 this.render();
 
-                refresh.addEventListener('click', this.render.bind(this))
+                refresh.addEventListener('click', ()=> window.location.reload())
             }
 
             get diffDate() {

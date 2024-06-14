@@ -63,6 +63,7 @@ header {
     font-size: 28px;
     font-weight: 400;
     margin-right: 3px;
+    letter-spacing: -0.25px;
 }
 
 .account_total span {
@@ -136,4 +137,8 @@ header {
     bottom: -2px;
     z-index: -1;
     opacity: 0.4;
+}
+
+#refresh {
+    cursor: pointer;
 }
