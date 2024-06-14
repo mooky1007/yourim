@@ -7,25 +7,36 @@
     <title>K&C CCL</title>
     <link rel="stylesheet" href="./style.css">
     <script src="./countUp.umd.js"></script>
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <style>
+        [data-aos=fade-up] {
+            transform: translate3d(0, 20px, 0);
+        }
+    </style>
 </head>
 
 <body>
     <header>
         <div class="title_section">
-            <span class="label">K&C CCL</span>
-            <h1>KIM&CHA COUPLE CREDIT LOAN</h1>
-            <span>+<strong id="diff_date">0</strong> 일 지났습니다.</span>
+            <span class="label" data-aos="fade-up">K&C CCL</span>
+            <h1 data-aos="fade-up" data-aos-delay="100">KIM&CHA COUPLE CREDIT LOAN</h1>
+            <span data-aos="fade-up" data-aos-delay="300">+<strong id="diff_date">0</strong> 일 지났습니다.</span>
         </div>
-        <div class="account_total">
+        <div class="account_total" data-aos="fade-up" data-aos-delay="150">
             <strong id="acc">5,000,000</strong>
             <span>원</span>
         </div>
     </header>
-    <div class="hover-title">
-        기본정보 및 이자조회
+    <div data-aos="fade-up" data-aos-delay="250">
+        <div class="hover-title" id="refresh">
+            기본정보 및 이자조회
+        </div>
     </div>
 
-    <ul class="infor">
+    <ul class="infor" data-aos="fade-up" data-aos-delay="300">
         <li class="row">
             <span>계좌주명</span>
             <span>김*림</span>
@@ -36,21 +47,21 @@
         </li>
         <li class="row">
             <span>시작일</span>
-            <span>2024. 06. 13</span>
+            <span id="start_date">2024. 06. 13</span>
         </li>
         <li class="row">
             <span>금액(원금)</span>
-            <span>5,000,000원</span>
+            <span id="start_money">5,000,000원</span>
         </li>
         <li class="row">
             <span>이자율</span>
-            <span>10%
+            <span id="late">10%
                 <span>(기본 5% + 여자친구 우대 5%)</span>
             </span>
         </li>
     </ul>
 
-    <ul class="interest_list" id="interList">
+    <ul class="interest_list" id="interList" data-aos="fade-up" data-aos-delay="500">
         <li class="row">
             <p>월별 예상이자 조회</p>
         </li>
@@ -64,6 +75,8 @@
                 this.date = "2024. 06. 13"
 
                 this.render();
+
+                refresh.addEventListener('click', this.render.bind(this))
             }
 
             get diffDate() {
@@ -78,6 +91,8 @@
             }
 
             listRender() {
+                interList.innerHTML = `<li class="row"><p>월별 예상이자 조회</p></li>`;
+
                 const year = 2024;
                 for (let i = 6; i < 12; i++) {
                     let days = new Date(year, i, 0).getDate();
@@ -110,15 +125,22 @@
             }
 
             render() {
-                diff_date.innerHTML = this.diffDate;
-                
-                var numAnim = new countUp.CountUp(acc, (this.firstPrice + (this.oneDay * this.diffDate)), {duration: 1,});
-                numAnim.start()
                 this.listRender();
+                start_date.innerHTML = this.date;
+                late.innerHTML = `${this.interestLate * 100}% <span>(기본 5% + 여자친구 우대 5%)</span>`
+                start_money.innerHTML = `${this.firstPrice.toLocaleString()}원`
+
+                const numAnim = new countUp.CountUp(acc, (this.firstPrice + (this.oneDay * this.diffDate)), { duration: 1, });
+                const numAnim2 = new countUp.CountUp(diff_date, (this.diffDate), { duration: 1, });
+                setTimeout(() => {
+                    numAnim.start();
+                    numAnim2.start();
+                }, 500)
             }
         }
 
         new Account();
+        AOS.init();
     </script>
 </body>
 
