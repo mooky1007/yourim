@@ -11,12 +11,14 @@ html {
     width: 100%;
     display: flex;
     justify-content: center;
+    background: linear-gradient(300deg, #333 0%, #000);
 }
 
 body {
     width: 100%;
     max-width: 500px;
     padding-bottom: 50px;
+    background: #fff;
 }
 
 header {
