@@ -126,6 +126,7 @@
                             this.totalAcc += result - (this.firstPrice + this.yearAcc);
 
                             div.classList.add('row')
+                            if(i === 5) div.style.fontWeight = 500;
                             mSpan.innerHTML = `${year}. ${i + 1 > 9 ? i + 1 : `0${i + 1}`}`;
                             mSpan2.innerHTML = `<span>${(result - (this.firstPrice + this.yearAcc)).toLocaleString()}</span><span>원</span>`;
                             mSpan3.innerHTML = `<span>${this.totalAcc.toLocaleString()}<span>원</span>`;
@@ -140,6 +141,7 @@
                         this.totalAcc += days * this.oneDay;
 
                         div.classList.add('row')
+                        if(i === 5) div.style.fontWeight = 600;
                         mSpan.innerHTML = `${year}. ${i + 1 > 9 ? i + 1 : `0${i + 1}`}`;
                         mSpan2.innerHTML = `<span>${(days * this.oneDay).toLocaleString()}</span><span>원</span>`;
                         mSpan3.innerHTML = `<span>${this.totalAcc.toLocaleString()}<span>원</span>`;

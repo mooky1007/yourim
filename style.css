@@ -93,7 +93,7 @@ header {
     font-size: 14px;
     box-shadow: 0 2px 8px rgb(180, 193, 213, 0.8);
     width: 90%;
-    padding: 15px 0;
+    padding: 15px 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -113,7 +113,7 @@ header {
 }
 
 .bar {
-    width: auto !important;
+    width: auto !important;;
     color: #ddd;
 
 }
