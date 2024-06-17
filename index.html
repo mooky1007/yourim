@@ -32,31 +32,33 @@
         </div>
     </header>
     <div data-aos="fade-up" data-aos-delay="250">
-        <div class="hover-title" id="refresh">
-            기본정보 및 이자조회
+        <div class="hover-title">
+            <span id="refresh">기본정보 및 이자조회</span>
+            <span class="bar">|</span>
+            <span id="welfare">복리 이자조회</span>
         </div>
     </div>
 
     <ul class="infor" data-aos="fade-up" data-aos-delay="300">
         <li class="row">
-            <span>계좌주명</span>
-            <span>김*림</span>
+            <span class="min-col">계좌주명</span>
+            <span class="min-col">김*림</span>
         </li>
         <li class="row">
-            <span>계약자명</span>
-            <span>차*혁</span>
+            <span class="min-col">계약자명</span>
+            <span class="min-col">차*혁</span>
         </li>
         <li class="row">
-            <span>시작일</span>
-            <span id="start_date">2024. 06. 13</span>
+            <span class="min-col">시작일</span>
+            <span class="min-col" id="start_date">2024. 06. 13</span>
         </li>
         <li class="row">
-            <span>금액(원금)</span>
-            <span id="start_money">5,000,000원</span>
+            <span class="min-col">금액(원금)</span>
+            <span class="min-col" id="start_money">5,000,000원</span>
         </li>
         <li class="row">
-            <span>이자율</span>
-            <span id="late">10%
+            <span class="min-col">이자율</span>
+            <span class="min-col" id="late">10%
                 <span>(기본 5% + 여자친구 우대 5%)</span>
             </span>
         </li>
@@ -74,10 +76,12 @@
                 this.firstPrice = 5000000;
                 this.interestLate = 0.1;
                 this.date = "2024. 06. 13"
-
+                this.count = 0;
+                this.totalAcc = this.firstPrice;
                 this.render();
 
-                refresh.addEventListener('click', () => window.location.reload())
+                refresh.addEventListener('click', () => this.render());
+                welfare.addEventListener('click', () => this.render2());
             }
 
             get diffDate() {
@@ -91,52 +95,73 @@
                 return Math.floor(this.firstPrice * this.interestLate / 365);
             }
 
-            listRender() {
-                interList.innerHTML = `<li class="row"><p>월별 예상이자 조회</p></li>`;
+            oneDayInterest(value) {
+                return Math.floor(value * this.interestLate / 365);
+            }
 
-                const year = 2024;
-                for (let i = 6; i < 12; i++) {
-                    let days = new Date(year, i, 0).getDate();
-                    const div = document.createElement('div')
-                    const mSpan = document.createElement('span')
-                    const mSpan2 = document.createElement('span')
+            async getMonthInterRender(year, welfare = false) {
+                return new Promise(async rsv => {
+                    let monthAcc = 0;
 
-                    div.classList.add('row')
-                    mSpan.innerHTML = `${year}. ${i + 1 > 9 ? i + 1 : `0${i + 1}`}`;
-                    mSpan2.innerHTML = `<span>${(days * this.oneDay).toLocaleString()}</span><span>원</span>`;
+                    for (let i = year === 2024 ? 6 : 0; i < 12; i++) {
+                        let days = new Date(year, i, 0).getDate();
+                        const div = document.createElement('div')
+                        const mSpan = document.createElement('span')
+                        const mSpan2 = document.createElement('span')
+                        const mSpan3 = document.createElement('span')
 
-                    div.append(mSpan, mSpan2);
-                    interList.append(div);
+                        if (welfare) {
+                            let result = 0;
+                            let accPrice = this.firstPrice + this.yearAcc;
+
+                            await new Promise(resolve => {
+                                for (let j = 0; j < days; j++) {
+                                    result = this.oneDayInterest(accPrice);
+                                    accPrice += result;
+                                }
+                                result = accPrice;
+                                resolve();
+                            })
+
+                            this.totalAcc += result - (this.firstPrice + this.yearAcc);
+
+                            div.classList.add('row')
+                            mSpan.innerHTML = `${year}. ${i + 1 > 9 ? i + 1 : `0${i + 1}`}`;
+                            mSpan2.innerHTML = `<span>${(result - (this.firstPrice + this.yearAcc)).toLocaleString()}</span><span>원</span>`;
+                            mSpan3.innerHTML = `<span>${this.totalAcc.toLocaleString()}<span>원</span>`;
+
+                            div.append(mSpan, mSpan2, mSpan3);
+                            interList.append(div);
+
+                            this.yearAcc = result - this.firstPrice;
+                            continue;
+                        }
+
+                        this.totalAcc += days * this.oneDay;
+
+                        div.classList.add('row')
+                        mSpan.innerHTML = `${year}. ${i + 1 > 9 ? i + 1 : `0${i + 1}`}`;
+                        mSpan2.innerHTML = `<span>${(days * this.oneDay).toLocaleString()}</span><span>원</span>`;
+                        mSpan3.innerHTML = `<span>${this.totalAcc.toLocaleString()}<span>원</span>`;
+
+                        div.append(mSpan, mSpan2, mSpan3);
+                        interList.append(div);
+                    }
+                    rsv();
+                })
+            }
+
+            async listRender(welfare = false) {
+                interList.innerHTML = `
+                    <li class="row"><p>월별 예상이자 조회(${welfare ? '복리' : '단리'})</p></li>            
+                `;
+                this.yearAcc = 0;
+                if (welfare) {
+                    this.yearAcc = 0;
                 }
 
-                const year2 = 2025;
-                for (let i = 0; i < 12; i++) {
-                    let days = new Date(year2, i, 0).getDate();
-                    const div = document.createElement('div')
-                    const mSpan = document.createElement('span')
-                    const mSpan2 = document.createElement('span')
-
-                    div.classList.add('row')
-                    mSpan.innerHTML = `${year2}. ${i + 1 > 9 ? i + 1 : `0${i + 1}`}`;
-                    mSpan2.innerHTML = `<span>${(days * this.oneDay).toLocaleString()}</span><span>원</span>`;
-
-                    div.append(mSpan, mSpan2);
-                    interList.append(div);
-                }
-
-                const year3 = 2026;
-                for (let i = 0; i < 12; i++) {
-                    let days = new Date(year3, i, 0).getDate();
-                    const div = document.createElement('div')
-                    const mSpan = document.createElement('span')
-                    const mSpan2 = document.createElement('span')
-
-                    div.classList.add('row')
-                    mSpan.innerHTML = `${year3}. ${i + 1 > 9 ? i + 1 : `0${i + 1}`}`;
-                    mSpan2.innerHTML = `<span>${(days * this.oneDay).toLocaleString()}</span><span>원</span>`;
-
-                    div.append(mSpan, mSpan2);
-                    interList.append(div);
+                for (let i = 0; i < 3 + (this.count || 0); i++) {
+                    await this.getMonthInterRender(2024 + i, welfare);
                 }
 
                 const div = document.createElement('div')
@@ -145,12 +170,40 @@
 
                 div.classList.add('row')
                 div.style.justifyContent = 'center';
-                div.style.fontSize = '20px';
-                div.innerHTML = `⋮`
+                div.style.fontSize = '14px';
+                div.style.cssText = `
+                    margin-top: 20px;
+                    border: 1px solid #ddd;
+                    border-radius: 3px;
+                    text-align: center;
+                    width: 100%;
+                    display: block;
+                    padding: 5px 0;
+                    cursor: pointer;
+                `;
+                div.innerHTML = `＋더보기`
+
+                div.addEventListener('click', () => {
+                    this.count += 1;
+                    if (welfare) {
+                        this.render2();
+                    } else {
+                        this.render();
+                    }
+
+                    setTimeout(() => {
+                        interList.scrollTo({
+                            top: interList.scrollHeight,
+                            behavior: "smooth",
+                        })
+                    }, 100)
+                })
+
                 interList.append(div);
             }
 
             render() {
+                this.totalAcc = this.firstPrice;
                 this.listRender();
                 start_date.innerHTML = this.date;
                 late.innerHTML = `${this.interestLate * 100}% <span>(기본 5% + 여자친구 우대 5%)</span>`
@@ -158,6 +211,35 @@
                 diff_money.innerHTML = (this.oneDay * this.diffDate).toLocaleString()
 
                 const numAnim = new countUp.CountUp(acc, (this.firstPrice + (this.oneDay * this.diffDate)), { duration: 1, });
+                const numAnim2 = new countUp.CountUp(diff_date, (this.diffDate), { duration: 1, });
+                setTimeout(() => {
+                    numAnim.start();
+                    numAnim2.start();
+                }, 500)
+            }
+
+            async render2() {
+                this.totalAcc = this.firstPrice;
+                let result = 0;
+                let accPrice = this.firstPrice;
+
+                await new Promise(resolve => {
+                    for (let i = 0; i < this.diffDate; i++) {
+                        result = this.oneDayInterest(accPrice);
+                        accPrice += result;
+                    }
+                    result = accPrice;
+                    resolve();
+                })
+
+                this.listRender(true);
+                start_date.innerHTML = this.date;
+                late.innerHTML = `${this.interestLate * 100}% <span>(기본 5% + 여자친구 우대 5%)</span>`
+                start_money.innerHTML = `${this.firstPrice.toLocaleString()}원`
+                diff_money.innerHTML = (accPrice - this.firstPrice).toLocaleString()
+
+
+                const numAnim = new countUp.CountUp(acc, (result), { duration: 1, });
                 const numAnim2 = new countUp.CountUp(diff_date, (this.diffDate), { duration: 1, });
                 setTimeout(() => {
                     numAnim.start();
